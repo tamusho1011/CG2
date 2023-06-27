@@ -19,6 +19,9 @@
         document.body.appendChild(renderer.domElement);
         renderer.setSize(width, height);
 
+        // 背景の色を設定
+        renderer.setClearColor(0xffffdd);
+
         // シーンを作成
         const scene = new THREE.Scene();
 
@@ -49,7 +52,7 @@
 
         // テクスチャー読み込み
         var textureLoader = new THREE.TextureLoader();  
-        var texture = textureLoader.load("stone.jpg");
+        var texture = textureLoader.load("img/sun.png");
         var mat = new THREE.MeshPhongMaterial();
         mat.map = texture;
 
@@ -65,7 +68,7 @@
 
 
         // バンプマップ読み込み
-        var bump = textureLoader.load("stone-bump.jpg");
+        var bump = textureLoader.load("img/sun.png");
         mat.bumpMap = bump;
         mat.bumpscale = 0.1;
 
@@ -78,25 +81,37 @@
         mat2.bumpscale = 0.1;
 
         // 箱を作成
-        var geometry1 = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+        var geometry1 = new THREE.BoxGeometry(0.9, 3, 0.8);
         //var material = new THREE.MeshPhongMaterial({ color: 0xffffff });
         //var box = new THREE.Mesh(geometry, material);
         var box = new THREE.Mesh(geometry1, mat1);
-        box.position.set(0,0,0); //位置を指定
+        box.position.set(0,1.5,0); //位置を指定
         scene.add(box);   // シーンに追加
 
         // 球を作成
-        var geometry2 = new THREE.SphereGeometry(0.5, 32, 32 ); ;
+        var geometry2 = new THREE.SphereGeometry(0.3, 22, 22 ); ;
         var Sphere = new THREE.Mesh(geometry2, mat);
-        Sphere.position.set(-1.5,0,0);
+        Sphere.position.set(-1.5,3.5,1);
         scene.add(Sphere);
 
         // 円柱を作成
         var geometry3 = new THREE.CylinderGeometry( 0, 0.5, 1.5, 30, 3);
         var Cylinder = new THREE.Mesh(geometry3, mat2);
-        Cylinder.position.set(1.5,0,0);
+        Cylinder.position.set(1.5,0.75,0);
         scene.add(Cylinder);
 
+        // 森を作成
+        for (let i = 0; i < 40; i++) {
+          var sprite = new THREE.Sprite(material);
+          // ランダムな座標に配置
+          sprite.position.x = 2 * (Math.random() - 0.5);
+          sprite.position.y = 0.4 * (Math.random()+0.3);
+          sprite.position.z = 2 * (Math.random() - 0.5);
+          // スケールを調整
+          sprite.scale.set(0.7, 0.95, 0.2);
+
+          scene.add(sprite);
+        }
 
         update();
 
@@ -107,16 +122,10 @@
           requestAnimationFrame(update);
 
            // 箱を回転させる
-          box.rotation.x += 0.01;
           box.rotation.y += 0.01;
-
-          // 箱を回転させる
-          Sphere.rotation.x += 0.01;
-          Sphere.rotation.y += 0.01;
 
           // 円柱を回転させる
           Cylinder.rotation.x += 0.01;
-          Cylinder.rotation.y += 0.01;
         }
       }
     </script>
